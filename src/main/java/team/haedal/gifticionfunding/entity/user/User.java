@@ -3,6 +3,8 @@ package team.haedal.gifticionfunding.entity.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -37,5 +39,32 @@ public class User {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    /**
+     * 생성 메서드
+     */
+    public static User createUser(String email, String nickname, Long point, LocalDate birthdate, String profileImageUrl, Role role) {
+        User user = new User();
+        user.email = email;
+        user.nickname = nickname;
+        user.point = point;
+        user.birthdate = birthdate;
+        user.profileImageUrl = profileImageUrl;
+        user.role = role;
+        return user;
+    }
+
+    /**
+     * 빌더 패턴
+     */
+    @Builder
+    private User(String email, String nickname, Long point, LocalDate birthdate, String profileImageUrl, Role role) {
+        this.email = email;
+        this.nickname = nickname;
+        this.point = point;
+        this.birthdate = birthdate;
+        this.profileImageUrl = profileImageUrl;
+        this.role = role;
+    }
 
 }
