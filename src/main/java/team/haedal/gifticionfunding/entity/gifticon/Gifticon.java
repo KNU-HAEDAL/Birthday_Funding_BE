@@ -6,13 +6,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.haedal.gifticionfunding.exception.NotEnoughStockException;
+import lombok.extern.slf4j.Slf4j;
+import team.haedal.gifticionfunding.global.error.NotEnoughStockException;
 
 import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Slf4j
 public class Gifticon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,17 +45,17 @@ public class Gifticon {
     private LocalDate expirationPeriod;
 
     /** 생성 메서드 */
-    public static Gifticon createGifticon(Long price, String name, Category category, Long stock, String imageUrl, String description, String brand, LocalDate expirationPeriod) {
-        Gifticon gifticon = new Gifticon();
-        gifticon.price = price;
-        gifticon.name = name;
-        gifticon.category = category;
-        gifticon.stock = stock;
-        gifticon.imageUrl = imageUrl;
-        gifticon.description = description;
-        gifticon.brand = brand;
-        gifticon.expirationPeriod = expirationPeriod;
-        return gifticon;
+    public static Gifticon createGifticon(GifticonCreate gifticonCreate) {
+        return Gifticon.builder()
+                .price(gifticonCreate.getPrice())
+                .name(gifticonCreate.getName())
+                .category(gifticonCreate.getCategory())
+                .stock(gifticonCreate.getStock())
+                .imageUrl(gifticonCreate.getImageUrl())
+                .description(gifticonCreate.getDescription())
+                .brand(gifticonCreate.getBrand())
+                .expirationPeriod(gifticonCreate.getExpirationPeriod())
+                .build();
     }
 
     /** 빌더 패턴 */
@@ -92,14 +94,17 @@ public class Gifticon {
     /**
      * 상품 수정
      */
-    public void updateGifticon(GifticonUpdate gifticonUpdate) {
-        this.price = gifticonUpdate.getPrice();
-        this.name = gifticonUpdate.getName();
-        this.category = gifticonUpdate.getCategory();
-        this.stock = gifticonUpdate.getStock();
-        this.imageUrl = gifticonUpdate.getImageUrl();
-        this.description = gifticonUpdate.getDescription();
-        this.brand = gifticonUpdate.getBrand();
-        this.expirationPeriod = gifticonUpdate.getExpirationPeriod();
+    public Gifticon updateGifticon(final GifticonUpdate gifticonUpdate) {
+        this.price = gifticonUpdate.getPrice() != null ? gifticonUpdate.getPrice() : this.price;
+        this.name = gifticonUpdate.getName() != null ? gifticonUpdate.getName() : this.name;
+        this.category = gifticonUpdate.getCategory() != null ? gifticonUpdate.getCategory() : this.category;
+        this.stock = gifticonUpdate.getStock() != null ? gifticonUpdate.getStock() : this.stock;
+        this.imageUrl = gifticonUpdate.getImageUrl() != null ? gifticonUpdate.getImageUrl() : this.imageUrl;
+        this.description = gifticonUpdate.getDescription() != null ? gifticonUpdate.getDescription() : this.description;
+        this.brand = gifticonUpdate.getBrand() != null ? gifticonUpdate.getBrand() : this.brand;
+        this.expirationPeriod = gifticonUpdate.getExpirationPeriod() != null ? gifticonUpdate.getExpirationPeriod() : this.expirationPeriod;
+
+        return this;
     }
+
 }
