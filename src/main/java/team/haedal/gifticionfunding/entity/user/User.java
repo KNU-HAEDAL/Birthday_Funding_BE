@@ -66,5 +66,22 @@ public class User {
         this.profileImageUrl = profileImageUrl;
         this.role = role;
     }
+    //== 비즈니스 로직==//
 
+    /**
+     * 포인트 충전
+     */
+    public void chargePoint(Long point) {
+        this.point += point;
+    }
+
+    /**
+     * 포인트 사용
+     */
+    public void usePoint(Long price) {
+        if (this.point < price) {
+            throw new IllegalStateException("포인트가 부족합니다.");
+        }
+        this.point -= price;
+    }
 }
