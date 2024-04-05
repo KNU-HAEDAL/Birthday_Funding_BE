@@ -15,7 +15,7 @@ import java.time.format.DateTimeParseException;
 public class CommonExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, NotFoundGifticonException.class, NotEnoughStockException.class})
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(IllegalArgumentException e){
         log.error("IllegalArgumentException : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
@@ -34,7 +34,5 @@ public class CommonExceptionHandler {
         log.error("[exceptionHandle] ex", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
     }
-
-
 
 }
