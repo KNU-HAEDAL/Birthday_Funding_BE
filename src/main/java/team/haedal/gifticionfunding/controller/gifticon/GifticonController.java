@@ -1,4 +1,4 @@
-package team.haedal.gifticionfunding.controller;
+package team.haedal.gifticionfunding.controller.gifticon;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +32,6 @@ public class GifticonController {
             @ApiResponse(responseCode = "200", description = "기프티콘 전체 조회 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
-
     })
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
