@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import team.haedal.gifticionfunding.dto.user.request.UserCreate;
 
 @Service
 @Slf4j
@@ -29,15 +30,17 @@ public class OAuthService {
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public String getEmail(String code) {
+    public UserCreate getUserInfo(String code) {
         String accessToken = getAccessToken(code);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity entity = new HttpEntity(headers);
 
-        String email = restTemplate.exchange(USER_INFO_URI,HttpMethod.GET, entity, JsonNode.class).getBody().get("email").asText();
-        return email;
+        //restTemplate.exchange(USER_INFO_URI,HttpMethod.GET, entity, JsonNode.class).getBody();
+        ResponseEntity<JsonNode> responseNode = restTemplate.exchange(USER_INFO_URI, HttpMethod.GET, entity, JsonNode.class);
+        JsonNode userInfoNode = responseNode.getBody();
+        return UserCreate.from(userInfoNode);
     }
 
     public String getAccessToken(String code) {

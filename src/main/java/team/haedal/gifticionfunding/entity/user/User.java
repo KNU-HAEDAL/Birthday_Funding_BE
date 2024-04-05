@@ -6,11 +6,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.haedal.gifticionfunding.dto.user.request.UserCreate;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +45,15 @@ public class User {
     /**
      * 생성 메서드
      */
-    public static User createUser(String email, String nickname, Long point, LocalDate birthdate, String profileImageUrl, Role role) {
-        User user = new User();
-        user.email = email;
-        user.nickname = nickname;
-        user.point = point;
-        user.birthdate = birthdate;
-        user.profileImageUrl = profileImageUrl;
-        user.role = role;
-        return user;
+    public static User createUser(UserCreate userCreate) {
+        return User.builder()
+                .email(userCreate.getEmail())
+                .nickname(userCreate.getNickname())
+                .point(userCreate.getPoint())
+                .birthdate(userCreate.getBirthdate())
+                .profileImageUrl(userCreate.getProfileImageUrl())
+                .role(userCreate.getRole())
+                .build();
     }
 
     /**
