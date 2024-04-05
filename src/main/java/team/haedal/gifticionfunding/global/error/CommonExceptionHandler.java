@@ -15,7 +15,7 @@ import java.time.format.DateTimeParseException;
 public class CommonExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, NotFoundGifticonException.class, NotEnoughStockException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, NotEnoughStockException.class})
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(IllegalArgumentException e){
         log.error("IllegalArgumentException : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
@@ -24,7 +24,7 @@ public class CommonExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<ErrorResponse> badDateFormatExceptionHandler(DateTimeParseException e){
-        log.error("DateTimeParseException : {}","날짜 형식이 맞지 않습니다" );
+        log.error("DateTimeParseException : {}","날짜 형식이 맞지 않습니다 YYYY-MM-DD 의 형식을 지원합니다 " );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "날짜 형식이 맞지 않습니다"));
     }
 
@@ -35,4 +35,10 @@ public class CommonExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> notFoundGifticonExceptionHandler(NotFoundGifticonException e){
+        log.error("NotFoundGifticonException : {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+    }
 }
