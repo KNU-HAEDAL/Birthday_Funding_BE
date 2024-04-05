@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team.haedal.gifticionfunding.entity.gifticon.Gifticon;
 import team.haedal.gifticionfunding.entity.gifticon.GifticonCreate;
 import team.haedal.gifticionfunding.entity.gifticon.GifticonUpdate;
+import team.haedal.gifticionfunding.global.error.NotFoundGifticonException;
 import team.haedal.gifticionfunding.global.validation.GifticonUpdateValidator;
 import team.haedal.gifticionfunding.repository.gifticon.GifticonJpaRepository;
 
@@ -37,7 +38,7 @@ public class GifticonService {
     public Gifticon findGifticon(Long gifticonId){
         Gifticon findGifticon= gifticonJpaRepository.findById(gifticonId).orElse(null);
         if(findGifticon == null){
-            throw new IllegalArgumentException("해당 상품이 존재하지 않습니다.");
+            throw new NotFoundGifticonException("해당 상품이 존재하지 않습니다.");
         }
         return findGifticon;
     }
@@ -47,7 +48,7 @@ public class GifticonService {
     public Gifticon updateGifticon(Long gifticonId, GifticonUpdate gifticonUpadate){
         Gifticon findGifticon = gifticonJpaRepository.findById(gifticonId).orElse(null);
         if(findGifticon == null){
-            throw new IllegalArgumentException("해당 상품이 존재하지 않습니다.");
+            throw new NotFoundGifticonException("해당 상품이 존재하지 않습니다.");
         }
         //gifticonUpdate 검증
         GifticonUpdateValidator.validate(gifticonUpadate);
@@ -58,6 +59,11 @@ public class GifticonService {
     //상품 삭제
     @Transactional
     public void deleteGifticon(Long gifticonId){
+        //상품이 있는지 확인
+        Gifticon findGifticon = gifticonJpaRepository.findById(gifticonId).orElse(null);
+        if(findGifticon == null){
+            throw new NotFoundGifticonException("해당 상품이 존재하지 않습니다.");
+        }
         gifticonJpaRepository.deleteById(gifticonId);
     }
 
@@ -68,7 +74,7 @@ public class GifticonService {
     public void addStock(Long gifticonId, Long stock){
         Gifticon findGifticon = gifticonJpaRepository.findById(gifticonId).orElse(null);
         if(findGifticon == null){
-            throw new IllegalArgumentException("해당 상품이 존재하지 않습니다.");
+            throw new NotFoundGifticonException("해당 상품이 존재하지 않습니다.");
         }
         findGifticon.addStock(stock);
     }
@@ -80,7 +86,7 @@ public class GifticonService {
     public void removeStock(Long gifticonId, Long stock){
         Gifticon findGifticon = gifticonJpaRepository.findById(gifticonId).orElse(null);
         if(findGifticon == null){
-            throw new IllegalArgumentException("해당 상품이 존재하지 않습니다.");
+            throw new NotFoundGifticonException("해당 상품이 존재하지 않습니다.");
         }
         findGifticon.removeStock(stock);
     }
