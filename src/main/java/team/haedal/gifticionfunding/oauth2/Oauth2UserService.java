@@ -1,4 +1,4 @@
-package team.haedal.gifticionfunding.service;
+package team.haedal.gifticionfunding.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/api/")
 @Tag(name="Auth",description="회원가입/로그인 관련 API")
 public class AuthController {
-    @GetMapping( "/auth")
+    @PostMapping( "/auth")
     @Operation(summary = "카카오 로그인 및 회원가입 API")
     public RedirectView redirectKakao() {
         RedirectView redirectView = new RedirectView();

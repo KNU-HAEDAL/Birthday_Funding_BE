@@ -1,4 +1,4 @@
-package team.haedal.gifticionfunding.service;
+package team.haedal.gifticionfunding.oauth2;
 
 import lombok.Builder;
 import lombok.Getter;
