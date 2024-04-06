@@ -10,8 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import team.haedal.gifticionfunding.dto.response.GiftiConResponse;
+import team.haedal.gifticionfunding.dto.response.GifticonResponse;
 import team.haedal.gifticionfunding.dto.response.GifticonDetailResponse;
 import team.haedal.gifticionfunding.service.GifticonServiceImpl;
 
@@ -42,10 +41,10 @@ public class GifticonControllerTest {
     void getGifticons() throws Exception {
         //given
         //gifticonService에 대한 Mock test
-        List<GiftiConResponse> giftiConResponseList = new ArrayList<>();
-        giftiConResponseList.add(new GiftiConResponse(1L,"기프티콘 이름",10000,"http://example.jpg"));
+        List<GifticonResponse> gifticonResponseList = new ArrayList<>();
+        gifticonResponseList.add(new GifticonResponse(1L,"기프티콘 이름",10000,"http://example.jpg"));
         given(gifticonService.getGifticons()).willReturn(
-                giftiConResponseList
+                gifticonResponseList
         );
 
         mockMvc.perform(
@@ -61,13 +60,12 @@ public class GifticonControllerTest {
     void getGifticonDetail() throws Exception {
         //given
         //gifticonService에 대한 Mock test
-        given(gifticonService.getGifticonDetail()).willReturn(
+        given(gifticonService.getGifticonDetail(1L)).willReturn(
                 new GifticonDetailResponse(
                         1L,
                         "카페라떼",
                         "스타벅스",
                         "http://image.png",
-                        LocalDate.of(2024,5,5),
                         LocalDate.of(2025,5,5))
         );
 
@@ -81,7 +79,6 @@ public class GifticonControllerTest {
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.brand").exists())
                 .andExpect(jsonPath("$.imageUrl").exists())
-                .andExpect(jsonPath("$.dateOfUse").exists())
                 .andExpect(jsonPath("$.expirationDate").exists())
                 .andDo(print());
 

@@ -6,27 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.haedal.gifticionfunding.domain.Gifticon;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
-public class GifticonDetailResponse {
+public class GifticonResponse {
     private Long id;
     private String name;
-    private String brand;
+    private int price;
     private String imageUrl;
-    private LocalDate expirationDate;
 
-    public static GifticonDetailResponse from(Gifticon gifticon){
-        return GifticonDetailResponse.builder()
+    public static GifticonResponse from(Gifticon gifticon){
+        return GifticonResponse.builder()
                 .id(gifticon.getId())
                 .name(gifticon.getName())
-                .brand(gifticon.getBrand())
+                .price(gifticon.getPrice())
                 .imageUrl(gifticon.getImageUrl())
-                .expirationDate(gifticon.getExpirationPeriod())
                 .build();
     }
-
 }
