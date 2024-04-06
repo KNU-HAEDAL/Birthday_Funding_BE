@@ -15,6 +15,7 @@ import team.haedal.gifticionfunding.dto.response.GiftiConResponse;
 import team.haedal.gifticionfunding.dto.response.GifticonDetailResponse;
 import team.haedal.gifticionfunding.service.GifticonServiceImpl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,36 @@ public class GifticonControllerTest {
                         .with(oauth2Login())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+    @Test
+    @DisplayName("기프티콘 상세 조회 테스트")
+    void getGifticonDetail() throws Exception {
+        //given
+        //gifticonService에 대한 Mock test
+        given(gifticonService.getGifticonDetail()).willReturn(
+                new GifticonDetailResponse(
+                        1L,
+                        "카페라떼",
+                        "스타벅스",
+                        "http://image.png",
+                        LocalDate.of(2024,5,5),
+                        LocalDate.of(2025,5,5))
+        );
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/gifticon/detail")
+                                .with(oauth2Login())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .param("id", String.valueOf(1L)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.brand").exists())
+                .andExpect(jsonPath("$.imageUrl").exists())
+                .andExpect(jsonPath("$.dateOfUse").exists())
+                .andExpect(jsonPath("$.expirationDate").exists())
                 .andDo(print());
 
     }

@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import team.haedal.gifticionfunding.dto.response.GiftiConResponse;
+import team.haedal.gifticionfunding.dto.response.GifticonDetailResponse;
 import team.haedal.gifticionfunding.service.GifticonService;
 
 import java.util.List;
@@ -18,10 +20,15 @@ import java.util.List;
 @RequestMapping("/api/gifticon")
 @Tag(name="Gifticon",description="기프티콘 관련 API")
 public class GifticonController {
+
     private final GifticonService gifticonService;
     @GetMapping()
     public ResponseEntity<List<GiftiConResponse>> getGifticons(){
         return ResponseEntity.ok().body(gifticonService.getGifticons());
+    }
+    @GetMapping("detail")
+    public ResponseEntity<GifticonDetailResponse> getGifticons(@RequestParam(name="id")Long id){
+        return ResponseEntity.ok().body(gifticonService.getGifticonDetail());
     }
 
 
