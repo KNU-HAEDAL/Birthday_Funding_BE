@@ -22,7 +22,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(request);
-        System.out.println(oAuth2User.getAttributes().toString());
+
         Map<String,String > properties = (Map<String, String>) oAuth2User.getAttributes().get("properties");
         saveMember(OAuthAttributes.of(properties));
         return oAuth2User;
