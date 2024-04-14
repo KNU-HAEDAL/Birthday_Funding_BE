@@ -29,7 +29,9 @@ public class OAuthController {
     public ResponseEntity<Void> socialLogin(@RequestParam("code") String code){
         UserCreate userInfo=oAuthService.getUserInfo(code);
         log.info("userInfo: {}",userInfo);
-        Optional<User> user=userService.SignIn(userInfo);
+        //null일때 exception 처리
+        Optional<User> user= Optional.ofNullable(userService.SignIn(userInfo).orElseThrow(() ->
+                new IllegalArgumentException("로그인 실패")));
         log.info("user: {}",user.get().getId());
         TokenDto tokenDto=securityService.generateTokenDto(user.get().getId());
         HttpHeaders headers=securityService.setTokenHeaders(tokenDto);

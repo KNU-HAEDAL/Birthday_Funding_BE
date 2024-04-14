@@ -31,6 +31,7 @@ public class OAuthService {
 
 
     public UserCreate getUserInfo(String code) {
+        //리소스 서버의 access token 받아오기
         String accessToken = getAccessToken(code);
 
         HttpHeaders headers = new HttpHeaders();
@@ -40,6 +41,7 @@ public class OAuthService {
         //restTemplate.exchange(USER_INFO_URI,HttpMethod.GET, entity, JsonNode.class).getBody();
         ResponseEntity<JsonNode> responseNode = restTemplate.exchange(USER_INFO_URI, HttpMethod.GET, entity, JsonNode.class);
         JsonNode userInfoNode = responseNode.getBody();
+        log.info("userInfoNode: {}", userInfoNode);
         return UserCreate.from(userInfoNode);
     }
 
@@ -56,7 +58,13 @@ public class OAuthService {
         HttpEntity entity=new HttpEntity(params, headers);
 
         ResponseEntity<JsonNode> responseNode=restTemplate.exchange(TOKEN_URI, HttpMethod.POST,entity,JsonNode.class);
+        //responseNode의 exception 처리
+        if (responseNode.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("카카오 인증 정보가 올바르지 않습니다.");
+        }
+        log.info("responseNode: {}",responseNode);
         JsonNode accessTokenNode=responseNode.getBody();
+        log.info("accessTokenNode: {}",accessTokenNode);
         return accessTokenNode.get("access_token").asText();
     }
 
