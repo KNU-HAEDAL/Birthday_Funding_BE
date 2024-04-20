@@ -1,5 +1,6 @@
 package team.haedal.gifticionfunding.global.error;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import team.haedal.gifticionfunding.global.error.auth.InvalidTokenException;
 
 import java.time.format.DateTimeParseException;
 
@@ -41,4 +43,6 @@ public class CommonExceptionHandler {
         log.error("NotFoundGifticonException : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
+
+
 }

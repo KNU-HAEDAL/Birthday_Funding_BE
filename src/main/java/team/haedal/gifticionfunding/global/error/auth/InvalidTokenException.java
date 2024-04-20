@@ -1,18 +1,11 @@
 package team.haedal.gifticionfunding.global.error.auth;
 
-public class InvalidTokenException extends RuntimeException{
-    public InvalidTokenException() {
-        super();
-    }
-    public InvalidTokenException(String message) {
-        super(message);
-    }
-    public InvalidTokenException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    public InvalidTokenException(Throwable cause) {
-        super(cause);
-    }
+import io.jsonwebtoken.ExpiredJwtException;
 
+public class InvalidTokenException extends ExpiredJwtException {
+
+    public InvalidTokenException(String message) {
+        super(null, null, message);
+    }
 
 }

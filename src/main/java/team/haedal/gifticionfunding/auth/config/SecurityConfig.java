@@ -26,6 +26,16 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
+    private static final String[] WHITE_LIST = {
+            "/auth2",
+            "/api-docs/**",
+            "/login/**",
+    };
+    private static final String[] AUTHENTICATION_LIST = {
+            "/api/gifticon"
+    };
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

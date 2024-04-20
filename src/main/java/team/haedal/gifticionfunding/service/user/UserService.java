@@ -22,13 +22,14 @@ public class UserService {
 
     @Transactional
     public Optional<User> SignIn(UserCreate userInfo) {
+        //email로 회원가입이 되어있는지 확인
         Optional<User> user = userJpaRepository.findByEmail(userInfo.getEmail());
+
+        //회원가입이 되어있지 않다면 회원가입 진행
         if (!user.isPresent()) {
             userJpaRepository.save(User.createUser(userInfo));
             return userJpaRepository.findByEmail(userInfo.getEmail());
         }
         return user;
     }
-
-
 }

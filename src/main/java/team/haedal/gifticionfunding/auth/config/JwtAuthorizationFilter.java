@@ -35,11 +35,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
+        //authorization header에서 access token을 추출
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String accessToken = jwtProvider.parseAccessToken(authHeader);
 
         if (StringUtils.hasText(accessToken) && jwtProvider.validateToken(accessToken)) {
-            // 권한이 USER 뿐이므로 로그인 한 모든 사용자에게 권한 부여
+            // 일단 USER 권한만 부여
             List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
             Authentication authentication = new UsernamePasswordAuthenticationToken(jwtProvider.getUserIdFromToken(accessToken), null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
