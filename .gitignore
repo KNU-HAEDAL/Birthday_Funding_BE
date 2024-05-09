@@ -37,3 +37,5 @@ out/
 .vscode/
 src/main/resources/application.yml
 src/main/java/team/haedal/gifticionfunding/service/OAuth2SuccessHandler.java
+src/main/resources/data.sql
+src/main/java/team/haedal/gifticionfunding/jwt/**
