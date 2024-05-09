@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByNickname(String nickname);
 
-    default Member getUserByEmail(String name) {
+    default Member getUserByName(String name) {
         return this.findByNickname(name).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }

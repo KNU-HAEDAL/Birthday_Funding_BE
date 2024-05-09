@@ -33,7 +33,6 @@ public class FriendController {
     @Operation(summary = "친구 요청 API")
     public void requestFriend(Authentication authentication,
                                            @RequestParam(name="friend") Long id){
-        System.out.println(authentication.getDetails().toString());
         friendService.requestFriend(authentication.getName(),id);
     }
 

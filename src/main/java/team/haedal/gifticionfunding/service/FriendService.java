@@ -29,7 +29,7 @@ public class FriendService {
 
     @Transactional(readOnly = true)
     public PageResponse<FriendResponse> getFriends(int page, String name){
-        Member member = memberRepository.getUserByEmail(name);
+        Member member = memberRepository.getUserByName(name);
         Page<FriendOnly> pageData = friendRepository.findAllByMemberAndStatus(PageRequest.of(page, 10), member, FriendStatus.ACCEPT);
 
         return PageResponse.<FriendResponse>builder()
@@ -44,7 +44,7 @@ public class FriendService {
 
     @Transactional()
     public void requestFriend(String name, Long friendId){
-        Member sender = memberRepository.getUserByEmail(name);
+        Member sender = memberRepository.getUserByName(name);
         Member receiver = memberRepository.getUserById(friendId);
 
         friendRepository.save(Friendship.request(sender,receiver));
@@ -53,7 +53,7 @@ public class FriendService {
 
     @Transactional()
     public void acceptFriend(String name, Long friendId){
-        Member receiver = memberRepository.getUserByEmail(name);
+        Member receiver = memberRepository.getUserByName(name);
         Member sender = memberRepository.getUserById(friendId);
         Friendship friendship = friendRepository.findByMemberAndFriend(sender, receiver)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -64,7 +64,7 @@ public class FriendService {
 
     @Transactional()
     public void rejectFriend(String name, Long friendId){
-        Member receiver = memberRepository.getUserByEmail(name);
+        Member receiver = memberRepository.getUserByName(name);
         Friendship friendship = friendRepository.findByMemberAndFriend(friendId, receiver.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -75,7 +75,7 @@ public class FriendService {
 
     @Transactional(readOnly = true)
     public PageResponse<FriendResponse> getRequestedFriends(int page, String name){
-        Member receiver = memberRepository.getUserByEmail(name);
+        Member receiver = memberRepository.getUserByName(name);
         Page<MemberOnly> pageData = friendRepository.findAllByFriendAndStatus(PageRequest.of(page, 10), receiver, FriendStatus.WAITING);
 
         return PageResponse.<FriendResponse>builder()
