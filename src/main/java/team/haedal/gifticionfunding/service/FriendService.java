@@ -12,9 +12,9 @@ import team.haedal.gifticionfunding.dto.PageResponse;
 import team.haedal.gifticionfunding.dto.response.friend.FriendResponse;
 import team.haedal.gifticionfunding.exception.CustomException;
 import team.haedal.gifticionfunding.exception.ErrorCode;
-import team.haedal.gifticionfunding.repository.dao.FriendOnly;
+import team.haedal.gifticionfunding.repository.vo.FriendOnly;
 import team.haedal.gifticionfunding.repository.FriendRepository;
-import team.haedal.gifticionfunding.repository.dao.MemberOnly;
+import team.haedal.gifticionfunding.repository.vo.MemberOnly;
 import team.haedal.gifticionfunding.repository.MemberRepository;
 
 import java.util.stream.Collectors;
