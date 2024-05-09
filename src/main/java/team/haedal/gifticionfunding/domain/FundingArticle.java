@@ -20,15 +20,21 @@ public class FundingArticle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "funding_id")
     private Long id;
-    @ManyToOne()
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
     private LocalDateTime createdAt;
+
     private LocalDate endAt;
+
     private String title;
+
     @Column(length = 50000)
     private String content;
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "funding_gifticon",
             joinColumns = @JoinColumn(name = "funding_id"),
             inverseJoinColumns = @JoinColumn(name = "gifticon_id"))

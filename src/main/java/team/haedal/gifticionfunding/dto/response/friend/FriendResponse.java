@@ -7,7 +7,6 @@ import team.haedal.gifticionfunding.domain.Member;
 
 import java.time.LocalDate;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @Getter
 public class FriendResponse {
     private Long id;

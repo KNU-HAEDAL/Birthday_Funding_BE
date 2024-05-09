@@ -1,9 +1,9 @@
 package team.haedal.gifticionfunding.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,20 +26,24 @@ public class FundingController {
 
     @GetMapping()
     @Operation(summary = "가능한 펀딩 조회 API")
-    public ResponseEntity<PageResponse<FundingResponse>> getFundings(Authentication authentication){
-        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundings(authentication.getName()));
+    public ResponseEntity<PageResponse<FundingResponse>> getFundings(Authentication authentication,
+                                                                     @RequestParam(value="page", defaultValue="0") int page){
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getFundings(page, authentication.getName()));
     }
 
     @GetMapping("/participate")
     @Operation(summary = "참여한 펀딩 조회 API")
-    public ResponseEntity<PageResponse<FundingResponse>> getTakenFundings(Authentication authentication){
-        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getTakenFundings(authentication.getName()));
+    @Hidden
+    public ResponseEntity<PageResponse<FundingResponse>> getTakenFundings(Authentication authentication,
+                                                                          @RequestParam(value="page", defaultValue="0") int page){
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getTakenFundings(page, authentication.getName()));
     }
 
     @GetMapping("/create")
     @Operation(summary = "생성한 펀딩 조회 API")
-    public ResponseEntity<PageResponse<FundingResponse>> getCreatedFundgins(Authentication authentication){
-        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getCreatedFundgins(authentication.getName()));
+    public ResponseEntity<PageResponse<FundingResponse>> getCreatedFundgins(Authentication authentication,
+                                                                            @RequestParam(value="page", defaultValue="0") int page){
+        return ResponseEntity.status(HttpStatus.OK).body(fundingService.getCreatedFundgins(page, authentication.getName()));
     }
 
     @PostMapping("/create")
