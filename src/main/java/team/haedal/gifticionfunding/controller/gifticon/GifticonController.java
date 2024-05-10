@@ -3,6 +3,7 @@ package team.haedal.gifticionfunding.controller.gifticon;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import team.haedal.gifticionfunding.service.gifticon.GifticonService;
 import java.net.URI;
 import java.util.List;
 
+@Tag(name = "기프티콘", description = "기프티콘 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor

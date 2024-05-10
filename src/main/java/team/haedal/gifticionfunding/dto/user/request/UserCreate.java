@@ -18,7 +18,7 @@ public class UserCreate {
     private final Role role;
 
     @Builder
-    public UserCreate(String email, String nickname, Long point, LocalDate birthdate, String profileImageUrl, Role role) {
+    private UserCreate(String email, String nickname, Long point, LocalDate birthdate, String profileImageUrl, Role role) {
         this.email = email;
         this.nickname = nickname;
         this.point = point;
