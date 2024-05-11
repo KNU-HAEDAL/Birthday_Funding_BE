@@ -7,7 +7,6 @@ import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import team.haedal.gifticionfunding.dto.user.request.FriendRequestCreateRequest;
 import team.haedal.gifticionfunding.dto.user.response.FriendInfoDto;
 import team.haedal.gifticionfunding.dto.user.response.FriendRequestReceiverDto;
 import team.haedal.gifticionfunding.dto.user.response.FriendRequestSenderDto;
-import team.haedal.gifticionfunding.dto.user.response.UserInfoDto;
 import team.haedal.gifticionfunding.service.user.FriendService;
 
 @Tag(name = "친구", description = "친구 API")
@@ -29,6 +27,7 @@ import team.haedal.gifticionfunding.service.user.FriendService;
 @RequiredArgsConstructor
 @RestController
 public class FriendController {
+
     private final FriendService friendService;
 
     @Operation(summary = "친구 추가 요청", description = "친구 추가 요청 id 반환")
@@ -36,29 +35,35 @@ public class FriendController {
     @PostMapping("api/user/friend")
     public void requestFriend(@RequestBody FriendRequestCreateRequest friendRequestCreateRequest) {
         log.info("친구 추가 요청");
-        friendService.requestFriend(friendRequestCreateRequest.getRequesterId(), friendRequestCreateRequest.getReceiverId());
+        friendService.requestFriend(friendRequestCreateRequest.getRequesterId(),
+            friendRequestCreateRequest.getReceiverId());
     }
 
     @Operation(summary = "친구 목록 조회", description = "목록 페이징 조회")
     @GetMapping("api/user/friend")
-    public PagingResponse<FriendInfoDto> getFriendList(@Valid PagingRequest pagingRequest, Principal principal) {
+    public PagingResponse<FriendInfoDto> getFriendList(@Valid PagingRequest pagingRequest,
+        Principal principal) {
         log.info("친구 목록 조회");
         return friendService.getFriendPaging(pagingRequest, Long.parseLong(principal.getName()));
     }
 
     @Operation(summary = "친구 추가 요청 보낸 목록 조회", description = "친구 추가 요청 목록 페이징 조회")
     @GetMapping("api/user/friend/request")
-    public PagingResponse<FriendRequestReceiverDto> getFriendRequestList(@Valid PagingRequest pagingRequest, Principal principal) {
+    public PagingResponse<FriendRequestReceiverDto> getFriendRequestList(
+        @Valid PagingRequest pagingRequest, Principal principal) {
         log.info("친구 추가 요청 보낸 목록 조회");
-        return friendService.getFriendRequestSenderPaging(pagingRequest, Long.parseLong(principal.getName()));
+        return friendService.getFriendRequestSenderPaging(pagingRequest,
+            Long.parseLong(principal.getName()));
 
     }
 
     @Operation(summary = "친구 추가 요청 받은 목록 조회", description = "친구 추가 요청 받은 목록 페이징 조회")
     @GetMapping("api/user/friend/receive")
-    public PagingResponse<FriendRequestSenderDto> getFriendRequestReceiveList(@Valid PagingRequest pagingRequest, Principal principal) {
+    public PagingResponse<FriendRequestSenderDto> getFriendRequestReceiveList(
+        @Valid PagingRequest pagingRequest, Principal principal) {
         log.info("친구 추가 요청 받은 목록 조회");
-        return friendService.getFriendRequestReceiverPaging(pagingRequest, Long.parseLong(principal.getName()));
+        return friendService.getFriendRequestReceiverPaging(pagingRequest,
+            Long.parseLong(principal.getName()));
     }
 
     @Operation(summary = "친구 추가 요청 수락", description = "친구 추가 요청 수락")
@@ -80,9 +85,18 @@ public class FriendController {
 
     @Operation(summary = "친구 삭제", description = "친구 삭제")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("api/user/friend/{friendshipId}")
-    public void deleteFriend(@PathVariable Long friendshipId) {
-        friendService.deleteFriend(friendshipId);
+    @DeleteMapping("api/user/friend/{friendId}")
+    public void deleteFriend(@PathVariable Long friendId, Principal principal) {
+        friendService.deleteFriend(Long.parseLong(principal.getName()), friendId);
+    }
+
+    @Operation(summary = "친구의 친구 목록 조회", description = "친구의 친구 목록 조회")
+    @GetMapping("api/user/friend/related")
+    public PagingResponse<FriendInfoDto> getRelatedFriendList(@Valid PagingRequest pagingRequest,
+        Principal principal) {
+        log.info("친구의 친구 목록 조회");
+        return friendService.getRelatedFriendPaging(pagingRequest,
+            Long.parseLong(principal.getName()));
     }
 
 

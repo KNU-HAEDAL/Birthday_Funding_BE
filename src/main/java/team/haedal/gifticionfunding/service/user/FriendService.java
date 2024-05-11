@@ -15,6 +15,7 @@ import team.haedal.gifticionfunding.entity.user.FriendRequest;
 import team.haedal.gifticionfunding.entity.user.Friendship;
 import team.haedal.gifticionfunding.entity.user.User;
 import team.haedal.gifticionfunding.global.error.NotFoundFriendRequestException;
+import team.haedal.gifticionfunding.global.error.NotFoundUserException;
 import team.haedal.gifticionfunding.repository.user.FriendRequestJpaRepository;
 import team.haedal.gifticionfunding.repository.user.FriendshipJpaRepository;
 import team.haedal.gifticionfunding.repository.user.UserJpaRepository;
@@ -34,11 +35,11 @@ public class FriendService {
      *
      * @return FriendRequest id
      */
-    public void requestFriend(Long userId, Long friendId) {
+    public Long requestFriend(Long userId, Long friendId) {
         User requester = userJpaRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundUserException("해당 유저가 존재하지 않습니다."));
         User requestee = userJpaRepository.findById(friendId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundUserException("해당 유저가 존재하지 않습니다."));
 
         /**
          * 이미 친구인지 확인
@@ -51,7 +52,7 @@ public class FriendService {
         }
 
         FriendRequest friendRequest = FriendRequest.create(requester, requestee);
-        friendRequestJpaRepository.save(friendRequest);
+        return friendRequestJpaRepository.save(friendRequest).getId();
     }
 
     /**
@@ -123,5 +124,12 @@ public class FriendService {
             .orElseThrow(() -> new IllegalArgumentException("해당 친구가 존재하지 않습니다."));
         friendshipJpaRepository.delete((Friendship) friendships.getFirst());
         friendshipJpaRepository.delete((Friendship) friendships.getSecond());
+    }
+
+    public PagingResponse<FriendInfoDto> getRelatedFriendPaging(PagingRequest pagingRequest,
+        Long userId) {
+        Page<Friendship> friendshipPage = friendshipJpaRepository.getFriendshipRelatedByUser1_id(
+            userId, pagingRequest.toPageable());
+        return PagingResponse.from(friendshipPage, friendship -> FriendInfoDto.from(friendship));
     }
 }

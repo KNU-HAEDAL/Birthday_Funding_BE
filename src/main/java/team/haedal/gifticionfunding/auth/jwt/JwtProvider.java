@@ -1,18 +1,23 @@
 package team.haedal.gifticionfunding.auth.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
+import java.security.Key;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import team.haedal.gifticionfunding.auth.dto.TokenDto;
 import team.haedal.gifticionfunding.global.error.auth.InvalidTokenException;
 
-import java.security.Key;
-import java.util.Date;
-
 @Component
 public class JwtProvider {
+
     private final Key key;
     private static final String GRANT_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRES_IN = 1000L * 60 * 30; //access 30분
@@ -31,37 +36,38 @@ public class JwtProvider {
         String refreshToken = generateRefreshToken(now);
 
         return TokenDto.builder()
-                .grantType(GRANT_TYPE)
-                .accessToken(accessToken)
-                .accessTokenExpiresIn(new Date(now + ACCESS_TOKEN_EXPIRES_IN).getTime())
-                .refreshToken(refreshToken)
-                .build();
+            .grantType(GRANT_TYPE)
+            .accessToken(accessToken)
+            .accessTokenExpiresIn(new Date(now + ACCESS_TOKEN_EXPIRES_IN).getTime())
+            .refreshToken(refreshToken)
+            .build();
     }
 
     public String generateAccessToken(long now, Long userId) {
         String accessToken = Jwts.builder()
-                .setSubject(String.valueOf(userId))
-                .setExpiration(new Date(now + ACCESS_TOKEN_EXPIRES_IN))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+            .setSubject(String.valueOf(userId))
+            .setExpiration(new Date(now + ACCESS_TOKEN_EXPIRES_IN))
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
 
         return accessToken;
     }
 
     public String generateRefreshToken(long now) {
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRES_IN))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+            .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRES_IN))
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
 
         return refreshToken;
     }
 
     public boolean validateToken(String token) {
-        try{
+        try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException |
+        } catch (SecurityException | MalformedJwtException | ExpiredJwtException |
+                 UnsupportedJwtException |
                  IllegalArgumentException e) {
             throw e;
         }
@@ -85,14 +91,21 @@ public class JwtProvider {
     protected Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(accessToken)
-                    .getBody();
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
         } catch (ExpiredJwtException e) {
             throw e;
         }
     }
 
 
+    public String generateAccessTokenForTest() {
+        return Jwts.builder()
+            .setSubject("1")
+            .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRES_IN))
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
+    }
 }
