@@ -2,8 +2,11 @@ package team.haedal.gifticionfunding.entity.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import team.haedal.gifticionfunding.entity.common.BaseTimeEntity;
 
 @Getter
@@ -15,11 +18,26 @@ public class Friendship extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_1_id")
-    private User user1;
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_2_id")
-    private User user2;
+    @JoinColumn(name = "friend_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User friend;
+
+    @Builder
+    private Friendship(User user, User friend) {
+        this.user = user;
+        this.friend = friend;
+    }
+
+    public static Friendship create(User user, User friend) {
+        return Friendship.builder()
+                .user(user)
+                .friend(friend)
+                .build();
+    }
 
 }

@@ -12,9 +12,9 @@ import team.haedal.gifticionfunding.dto.common.PagingResponse;
 import team.haedal.gifticionfunding.dto.gifticon.response.GifticonDetailModel;
 import team.haedal.gifticionfunding.dto.gifticon.response.GifticonModel;
 import team.haedal.gifticionfunding.entity.gifticon.Gifticon;
-import team.haedal.gifticionfunding.entity.gifticon.GifticonCreate;
-import team.haedal.gifticionfunding.domain.GifticonSearch;
-import team.haedal.gifticionfunding.entity.gifticon.GifticonUpdate;
+import team.haedal.gifticionfunding.domain.giftucon.GifticonCreate;
+import team.haedal.gifticionfunding.domain.giftucon.GifticonSearch;
+import team.haedal.gifticionfunding.domain.giftucon.GifticonUpdate;
 import team.haedal.gifticionfunding.repository.gifticon.GifticonJpaRepository;
 import team.haedal.gifticionfunding.repository.gifticon.GifticonQueryRepository;
 
@@ -25,7 +25,6 @@ public class GifticonService {
     private final GifticonJpaRepository gifticonJpaRepository;
     private final GifticonQueryRepository gifticonQueryRepository;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public Long createGifticon(GifticonCreate gifticonCreate) {
         Gifticon gifticon = Gifticon.create(gifticonCreate);
@@ -45,7 +44,6 @@ public class GifticonService {
         return GifticonDetailModel.from(gifticon);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void updateGifticon(Long gifticonId, GifticonUpdate gifticonUpdate) {
         Gifticon gifticon = gifticonJpaRepository.getById(gifticonId);
@@ -57,17 +55,15 @@ public class GifticonService {
      * 기프티콘 재고 추가
      * 충돌방지를 위해 비관적 락인 PESSIMISTIC_WRITE 사용
      */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public Long addGifticonStock(Long gifticonId, Integer stock) {
         Gifticon gifticon = gifticonJpaRepository.findByIdForUpdate(gifticonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Gifticon", gifticonId));
-        Long newStock = gifticon.addStock(stock);
-        return newStock;
+        gifticon.addStock(stock);
+        return gifticon.getStock();
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void deleteGifticon(Long gifticonId) {
         Gifticon gifticon = gifticonJpaRepository.getById(gifticonId);

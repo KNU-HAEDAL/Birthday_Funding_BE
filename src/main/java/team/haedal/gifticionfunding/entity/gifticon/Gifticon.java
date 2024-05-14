@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.haedal.gifticionfunding.domain.Status;
+import team.haedal.gifticionfunding.domain.giftucon.GifticonCreate;
+import team.haedal.gifticionfunding.domain.giftucon.GifticonUpdate;
 import team.haedal.gifticionfunding.entity.common.BaseTimeEntity;
 
 @Getter
@@ -79,12 +81,11 @@ public class Gifticon extends BaseTimeEntity {
         this.expirationPeriod = gifticonUpdate.getExpirationPeriod();
     }
 
-    public Long addStock(Integer stock) {
+    public void addStock(Integer stock) {
         if(stock < 0) {
             throw new IllegalArgumentException("재고는 0 이상이어야 합니다.");
         }
         this.stock += stock;
-        return this.stock;
     }
 
     public boolean isActive() {
