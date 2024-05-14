@@ -1,12 +1,12 @@
 spring: # default test profile
   datasource:
-    url: "jdbc:h2:mem:birthdayFunding;"
+    url: "jdbc:h2:tcp://localhost/~/test;"
     username: "sa"
     password: ""
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
@@ -23,5 +23,22 @@ logging.level:
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    api-docs:
+      path: /api-docs
+    show-actuator: true
+    default-consumes-media-type: application/json
+    default-produces-media-type: application/json
+    paths-to-match:
 jwt:
-  secret: 4099a46b-39db-4860-a61b-2ae76ea24c43
+  secret: 4099a46b39db4860a61b2ae76ea24c434099a46b39db4860a61b2ae76ea24c434099a46b39db4860a61b2ae76ea24c434099a46b39db4860a61b2ae76ea24c434099a46b39db4860a61b2ae76ea24c434099a46b39db4860a61b2ae76ea24c43
+kakao:
+  client-id: ab472e238df9e16d1e7662ee32c4f9cf
+  redirect-uri: http://localhost:5173/redirection
+  token-uri: https://kauth.kakao.com/oauth/token
+  user-info-uri: https://kapi.kakao.com/v2/user/me
