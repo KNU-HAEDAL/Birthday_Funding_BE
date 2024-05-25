@@ -2,7 +2,7 @@ package team.haedal.gifticionfunding.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import team.haedal.gifticionfunding.domain.FundingArticle;
+import team.haedal.gifticionfunding.domain.funding.FundingArticle;
 import team.haedal.gifticionfunding.domain.Gifticon;
 
 import java.time.LocalDate;

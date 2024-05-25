@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import team.haedal.gifticionfunding.dto.PageResponse;
 import team.haedal.gifticionfunding.dto.request.FundingArticleRequest;
+import team.haedal.gifticionfunding.dto.request.FundingJoinRequest;
 import team.haedal.gifticionfunding.dto.response.FundingResponse;
 import team.haedal.gifticionfunding.service.FundingService;
 
@@ -39,18 +40,25 @@ public class FundingController {
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.getTakenFundings(page, authentication.getName()));
     }
 
-    @GetMapping("/create")
+    @GetMapping("/created")
     @Operation(summary = "생성한 펀딩 조회 API")
     public ResponseEntity<PageResponse<FundingResponse>> getCreatedFundgins(Authentication authentication,
                                                                             @RequestParam(value="page", defaultValue="0") int page){
         return ResponseEntity.status(HttpStatus.OK).body(fundingService.getCreatedFundgins(page, authentication.getName()));
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     @Operation(summary = "펀딩 생성 API")
     public void createFunding(Authentication authentication,
                               @RequestBody FundingArticleRequest request){
         fundingService.createFunding(authentication.getName(), request);
+    }
+
+    @PostMapping("/participate")
+    @Operation(summary = "펀딩 참여 API")
+    public void participateFunding(Authentication authentication,
+                              @RequestBody FundingJoinRequest request){
+        fundingService.participateFunding(authentication.getName(), request);
     }
 
 }

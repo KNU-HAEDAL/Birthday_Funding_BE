@@ -1,4 +1,4 @@
-package team.haedal.gifticionfunding.domain;
+package team.haedal.gifticionfunding.domain.funding;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import team.haedal.gifticionfunding.domain.Gifticon;
+import team.haedal.gifticionfunding.domain.Member;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

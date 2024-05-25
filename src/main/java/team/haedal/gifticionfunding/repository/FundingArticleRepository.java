@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import team.haedal.gifticionfunding.domain.FundingArticle;
+import team.haedal.gifticionfunding.domain.funding.FundingArticle;
 import team.haedal.gifticionfunding.domain.Member;
 
 public interface FundingArticleRepository extends JpaRepository<FundingArticle, Long> {

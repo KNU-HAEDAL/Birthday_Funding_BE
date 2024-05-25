@@ -4,17 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import team.haedal.gifticionfunding.domain.FundingArticle;
-import team.haedal.gifticionfunding.domain.Gifticon;
-import team.haedal.gifticionfunding.domain.Member;
+import org.springframework.transaction.annotation.Transactional;
+import team.haedal.gifticionfunding.domain.*;
+import team.haedal.gifticionfunding.domain.funding.FundingArticle;
 import team.haedal.gifticionfunding.dto.PageResponse;
 import team.haedal.gifticionfunding.dto.request.FundingArticleRequest;
+import team.haedal.gifticionfunding.dto.request.FundingJoinRequest;
 import team.haedal.gifticionfunding.dto.response.FundingResponse;
 import team.haedal.gifticionfunding.exception.CustomException;
 import team.haedal.gifticionfunding.exception.ErrorCode;
-import team.haedal.gifticionfunding.repository.FundingArticleRepository;
-import team.haedal.gifticionfunding.repository.GifticonRepository;
-import team.haedal.gifticionfunding.repository.MemberRepository;
+import team.haedal.gifticionfunding.repository.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +26,11 @@ public class FundingService {
     private final MemberRepository memberRepository;
     private final FundingArticleRepository fundingArticleRepository;
     private final GifticonRepository gifticonRepository;
+    private final FundingContributeRepository contributeRepository;
+    private final MemberGifticonRepository memberGifticonRepository;
+    private final FundingGifticonRepository fundingGifticonRepository;
 
+    @Transactional(readOnly = true)
     public PageResponse<FundingResponse> getFundings(int page, String name){
         /**
          * funding article 의 작성자가 친구인 경우, 친구의 친구인 경우 조회
@@ -44,6 +47,7 @@ public class FundingService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<FundingResponse> getTakenFundings(int page, String name){
         return null;
     }
@@ -66,6 +70,7 @@ public class FundingService {
      * 2. 마감일이 유효한지
      * 3. 기프티콘이 유효한지(재고가 남아있어야 함)
      */
+    @Transactional
     public void createFunding(String name, FundingArticleRequest request){
         Member member = memberRepository.getUserByName(name);
 
@@ -81,5 +86,27 @@ public class FundingService {
         fundingArticleRepository.save(FundingArticle.of(member, request.getEndAt().plusDays(1),
                                                         request.getTitle(), request.getContent(),
                                                         gifticonList));
+    }
+
+
+    /**
+     * 게시자의 친구의 친구는 펀딩에 참여할 수 있다.
+     * 선택한 기프티콘이 게시자가 게시한 기프티콘 목록에 있다면 contribute를 한다.
+     * @param name
+     * @param request
+     */
+    @Transactional
+    public void participateFunding(String name, FundingJoinRequest request){
+        Member member = memberRepository.getUserByName(name);
+        FundingArticle fundingArticle = fundingArticleRepository.findById(request.getArticleId())
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_INPUT, "존재하지 않는 게시글입니다."));
+        MemberGifticon gifticon = memberGifticonRepository.findById(request.getMemberGifticonId())
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_INPUT, "존재하지 않는 기프티콘입니다."));
+
+        if (!fundingArticle.getGifticonList().contains(request.getMemberGifticonId())){
+            throw new CustomException(ErrorCode.INVALID_INPUT,"존재하지 않는 기프티콘입니다.");
+        }
+
+
     }
 }

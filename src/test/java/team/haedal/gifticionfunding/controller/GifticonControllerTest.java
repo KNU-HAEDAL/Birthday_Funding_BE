@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(GifticonController.class)
-@AutoConfigureMockMvc
 public class GifticonControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -81,6 +81,9 @@ public class GifticonControllerTest {
                 .andExpect(jsonPath("$.imageUrl").exists())
                 .andExpect(jsonPath("$.expirationDate").exists())
                 .andDo(print());
+
+        // verify : 메소드가 실행이 됐는지를 확인
+        verify(gifticonService).getGifticonDetail(1L);
 
     }
 }
