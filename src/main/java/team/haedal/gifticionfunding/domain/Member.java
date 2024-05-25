@@ -2,10 +2,7 @@ package team.haedal.gifticionfunding.domain;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.haedal.gifticionfunding.domain.enums.Role;
 
 import java.time.LocalDate;
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Getter
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

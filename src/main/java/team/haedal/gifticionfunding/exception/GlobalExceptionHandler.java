@@ -10,6 +10,6 @@ public class GlobalExceptionHandler {
         // exception.printStackTrace();
 
         return ResponseEntity.status(exception.getErrorCode().getError())
-                .body(new ExceptionDto(exception.getErrorCode()));
+                .body(new ExceptionDto(exception.getErrorCode(), exception.getMessage()));
     }
 }

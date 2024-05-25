@@ -1,10 +1,7 @@
 package team.haedal.gifticionfunding.domain;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +18,7 @@ import java.time.LocalDate;
 public class Gifticon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "gifticon_id")
     private Long id;
     private int price;
     private String name;
